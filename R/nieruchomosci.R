@@ -46,8 +46,13 @@ anyDuplicated(nier$id)
 #Dodaj kolumnę `cena_twd_m2`: `cena_10k_twd_ping * 10000 / 3.3`. Oblicz minimum, medianę, średnią i maksimum ceny za m². Wyświetl pięć nieruchomości o najwyższej cenie jednostkowej wraz z ich wiekiem, odległością od metra i liczbą sklepów.
 
 #Pytanie: czy średnia jest wyższa od mediany? Co to mówi o rozkładzie cen? Nie interpretuj tej ceny jako wartości całego lokalu.
+#średnia jest niższa od mediany, czyli więcej niż połowa obserwacji ma wartości wyższe niż średnia.Oznacza to, że możemy mieć skrajnie niskie wartości odstające.
 
 # WASZE ROZWIĄZANIE
+nier$cena_twd_m2<-nier$cena_10k_twd_ping*10000
+summary(nier$cena_twd_m2)
+slice_max(nier,nier$cena_twd_m2,n = 5)%>%
+  select(wiek_lat,metro_m,sklepy)
 # mutate(), summarise(), arrange(desc(...)), slice_head(n = 5)
 
 ### Zadanie 3 — ile obserwacji jest blisko metra?
@@ -57,8 +62,11 @@ anyDuplicated(nier$id)
 #Wynik opisz jednym zdaniem z liczbami i jednostkami. To proste porównanie opisowe, a nie dowód, że odległość powoduje zmianę ceny.
 
 # WASZE ROZWIĄZANIE
-# Wskazówka: mutate(blisko_metra = metro_m <= 500)
+nier$blisko_metra<-nier$metro_m<=500
+group_by(blisko_metra)
+# wskazówka: mutate(blisko_metra = metro_m <= 500)
 # group_by(blisko_metra) %>% summarise(liczba = n(), mediana = median(...))
+
 
 ### Zadanie 4 — wiek, odległość i sklepy
 
