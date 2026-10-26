@@ -49,10 +49,10 @@ anyDuplicated(nier$id)
 #średnia jest niższa od mediany, czyli więcej niż połowa obserwacji ma wartości wyższe niż średnia.Oznacza to, że możemy mieć skrajnie niskie wartości odstające.
 
 # WASZE ROZWIĄZANIE
-nier$cena_twd_m2<-nier$cena_10k_twd_ping*10000
+nier$cena_twd_m2<-nier$cena_10k_twd_ping*10000/3.3
 summary(nier$cena_twd_m2)
 slice_max(nier,nier$cena_twd_m2,n = 5)%>%
-  select(wiek_lat,metro_m,sklepy)
+  select(cena_twd_m2,wiek_lat,metro_m,sklepy)
 # mutate(), summarise(), arrange(desc(...)), slice_head(n = 5)
 
 ### Zadanie 3 — ile obserwacji jest blisko metra?
@@ -62,8 +62,20 @@ slice_max(nier,nier$cena_twd_m2,n = 5)%>%
 #Wynik opisz jednym zdaniem z liczbami i jednostkami. To proste porównanie opisowe, a nie dowód, że odległość powoduje zmianę ceny.
 
 # WASZE ROZWIĄZANIE
-nier$blisko_metra<-nier$metro_m<=500
-group_by(blisko_metra)
+nier$blisko_metra = nier$metro_m <= 500
+
+colSums(is.na(nier))
+cat(sum(nier$blisko_metra)/nrow(nier)*100,"%")
+
+# inny sposób
+nier %>%
+  mutate(blisko_metra2 = metro_m <= 500) %>%
+  group_by(blisko_metra2) %>% 
+  summarise(liczba = n(), mediana = median(cena_twd_m2)) %>%
+  mutate(procent=liczba/sum(liczba)*100)
+
+#51% mieszkań (211) jest blisko metra, a pozostałe daleko (203).Mieszkania blisko metra mają większą medianę (135758) niż te dalej(85152). 
+
 # wskazówka: mutate(blisko_metra = metro_m <= 500)
 # group_by(blisko_metra) %>% summarise(liczba = n(), mediana = median(...))
 
@@ -73,12 +85,24 @@ group_by(blisko_metra)
 #Podziel obserwacje na trzy strefy odległości od metra: **do 500 m**, **powyżej 500 do 1500 m**, **powyżej 1500 m**. Dla każdej strefy oblicz liczbę obserwacji, medianę ceny TWD/m², medianę wieku i średnią liczbę sklepów.
 
 #Następnie sprawdź, czy wśród budynków w wieku najwyżej 20 lat ranking median stref pozostaje taki sam. Dlaczego porównanie wszystkich budynków może różnić się od porównania budynków młodszych?
-  
-# Przykład tworzenia zmiennej grupującej
-nier <- nier %>% mutate(
-  strefa = cut(metro_m, c(-Inf, 500, 1500, Inf),
-               labels = c("do 500 m", "500–1500 m", "ponad 1500 m"))
-)
-
 # WASZE ROZWIĄZANIE
+# Przykład tworzenia zmiennej grupującej
+nier2 <- nier %>% 
+  mutate(
+  strefa = cut(metro_m, c(-Inf, 500, 1500, Inf),
+               labels = c("do 500 m", "500–1500 m", "ponad 1500 m"))) %>%
+  group_by(strefa) %>%
+  summarise(liczba = n(), med_cena = median(cena_twd_m2), med_wiek = median(wiek_lat), średnia_liczba_sklep = mean(sklepy))
+nier2
+
+nier3 <- nier %>% 
+  filter(wiek_lat <= 20)%>%
+  mutate(
+    strefa = cut(metro_m, c(-Inf, 500, 1500, Inf),
+                 labels = c("do 500 m", "500–1500 m", "ponad 1500 m"))) %>%
+  group_by(strefa) %>%
+  summarise(liczba = n(), med_cena = median(cena_twd_m2), med_wiek = median(wiek_lat), średnia_liczba_sklep = mean(sklepy))
+nier3
+#Oczywiście spadnie mediana wieku, bo wykluczyliśmy starsze budynki funkcją filter. Mediana ceny wzrosła, czyli budynki są nowsze, mają wyższy standard, kosztują więcej. Średnia liczba sklepów nieznacznie spadła, czyli być może na nowo budowanych osiedlach mniej sklepów jest tworzonych w zamian za większą liczbę mieszkań.
+
 # group_by(strefa), summarise(), filter(wiek_lat <= 20)
