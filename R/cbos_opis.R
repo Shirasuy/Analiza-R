@@ -49,7 +49,7 @@ tabela_miejscowosc <- cbos %>%
 
 tabela_miejscowosc
 
-#Zadanie 6
+#Zadanie 6 - 
 
 library(dplyr)
 
