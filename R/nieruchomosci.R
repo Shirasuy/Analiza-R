@@ -1,7 +1,6 @@
 ## 2. Nieruchomości: co wpływa na cenę jednostkową?
 
 #Źródło: [Real Estate Valuation (UCI)](https://archive.ics.uci.edu/dataset/477/real+estate+valuation+data+set), [plik CSV w repozytorium prowadzącego](https://github.com/kflisikowsky/pandas_exercises/blob/62863036107888c0c7273c40e8d309a43f4da3a9/data/models/real_estate.csv). To **414 historycznych obserwacji** z rynku nieruchomości w New Taipei (Tajwan). Zmienna ceny oznacza 10 000 TWD za ping, a nie cenę całej nieruchomości. Przyjmujemy 1 ping ≈ 3,3 m².
-
 library(dplyr)
 library(tidyr)
 
