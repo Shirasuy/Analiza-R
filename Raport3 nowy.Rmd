@@ -419,7 +419,8 @@ print(c2)
 
 
 ```{r 35, eval=FALSE}
-# miejsce na kod
+c3 <- source("./R/c3.R")
+print(c3)
 ```
 
 
@@ -427,7 +428,8 @@ print(c2)
 
 
 ```{r 36, eval=FALSE}
-# miejsce na kod
+c4 <- source("./R/c4.R")
+print(c4)
 ```
 
 
