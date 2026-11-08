@@ -35,6 +35,8 @@ Przydatne materiały: \
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 if(!require('tidyverse')) install.packages('tidyverse')
 library(tidyverse)
+if(!require('lubridate')) install.packages('lubridate')
+library(lubridate)
 ```
 
 Dane pochodzą ze strony [https://flixgem.com/](https://flixgem.com/) (wersja zbioru danych z dnia 12 marca 2021). Dane zawierają informacje na temat 9425 filmów i seriali dostępnych na Netlix.
@@ -246,7 +248,8 @@ dane %>%
 **CHALLENGE 1:** Jaki jest najstarszy film Woody'ego Allena dostępny na Netflixie?
 
 ```{r 21, eval=FALSE}
-# miejsce na kod
+c1 <- source("./R/c1.R")
+print(c1)
 ```
 
 
@@ -406,7 +409,8 @@ dane %>%
 
 
 ```{r 34, eval=FALSE}
-# miejsce na kod
+c2 <- source("./R/c2.R")
+print(c2)
 ```
 
 
